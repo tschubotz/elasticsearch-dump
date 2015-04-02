@@ -52,6 +52,12 @@ elasticdump \
   --output=http://staging.es.com:9200/my_index \
   --type=data
 
+# Copy an index mappings and settings from production to staging without data:
+elasticdump \
+  --input=http://production.es.com:9200/my_index \
+  --output=http://staging.es.com:9200/my_index \
+  --type=mappings,settings
+
 # Backup index data to a file:
 elasticdump \
   --input=http://production.es.com:9200/my_index \
@@ -90,55 +96,55 @@ elasticdump \
 ```
 Usage: elasticdump --input [SOURCE] --output [DESTINATION] [OPTIONS]
 
---input                       
+--input
                     Source location (required)
---output                      
+--output
                     Destination location (required)
---limit                       
-                    How many objects to move in bulk per operation 
+--limit
+                    How many objects to move in bulk per operation
                     (default: 100)
---debug                       
-                    Display the elasticsearch commands being used 
+--debug
+                    Display the elasticsearch commands being used
                     (default: false)
---type                        
-                    What are we exporting? 
-                    (default: data, options: [data, mapping])
---delete                      
-                    Delete documents one-by-one from the input as they are 
+--type
+                    What are we exporting?
+                    (default: data, options: [data, mapping, 'mappings,settings'])
+--delete
+                    Delete documents one-by-one from the input as they are
                     moved.  Will not delete the source index
                     (default: false)
---searchBody                  
-                    Preform a partial extract based on search results 
-                    (when ES is the input, 
+--searchBody
+                    Preform a partial extract based on search results
+                    (when ES is the input,
                       default: '{"query": { "match_all": {} } }')
---all                         
-                    Load/store documents from ALL indexes 
+--all
+                    Load/store documents from ALL indexes
                     (default: false)
---bulk                        
-                    Leverage elasticsearch Bulk API when writing documents 
+--bulk
+                    Leverage elasticsearch Bulk API when writing documents
                     (default: false)
---ignore-errors               
-                    Will continue the read/write loop on write error 
+--ignore-errors
+                    Will continue the read/write loop on write error
                     (default: false)
---scrollTime                  
-                    Time the nodes will hold the requested search in order. 
+--scrollTime
+                    Time the nodes will hold the requested search in order.
                     (default: 10m)
---maxSockets                  
-                    How many simultaneous HTTP requests can we process make? 
-                    (default: 
-                      5 [node <= v0.10.x] / 
+--maxSockets
+                    How many simultaneous HTTP requests can we process make?
+                    (default:
+                      5 [node <= v0.10.x] /
                       Infinity [node >= v0.11.x] )
---bulk-use-output-index-name  
+--bulk-use-output-index-name
                     Force use of destination index name (the actual output URL)
-                    as destination while bulk writing to ES. Allows 
-                    leveraging Bulk API copying data inside the same 
-                    elasticsearch instance. 
+                    as destination while bulk writing to ES. Allows
+                    leveraging Bulk API copying data inside the same
+                    elasticsearch instance.
                     (default: false)
---timeout                     
-                    Integer containing the number of milliseconds to wait for 
-                    a request to respond before aborting the request. Passed 
-                    directly to the request library. If used in bulk writing, 
-                    it will result in the entire batch not being written. 
+--timeout
+                    Integer containing the number of milliseconds to wait for
+                    a request to respond before aborting the request. Passed
+                    directly to the request library. If used in bulk writing,
+                    it will result in the entire batch not being written.
                     Mostly used when you don't care too much if you lose some
                     data when importing but rather have speed.
 --skip

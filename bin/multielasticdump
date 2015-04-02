@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // I am a wrapper around basic elastcidump
-// I will source all indices from your elasticserach server and dump them out to .json and .mapping.json files
+// I will source all indices from your elasticserach server and dump them out to .json, .mapping.json and .settings.json files
 // I probably only work on *nix hosts
 
 var argv        = require('optimist').argv;
@@ -39,12 +39,12 @@ var log = function(type, message){
   }else{
     message = (new Date().toUTCString()) + " | " + message;
   }
-  console.log(message); 
+  console.log(message);
 };
 
 for(var i in defaults){
   options[i] = defaults[i];
-  if(argv[i]){ 
+  if(argv[i]){
     options[i] = argv[i];
   }
   if(options[i] === 'true' ){ options[i] = true; }
@@ -83,7 +83,7 @@ var work = function(){
 var dump = function(){
   working++;
   var index = matchedIndexes[indexCounter];
-  
+
   if(!index){
     working--;
     return;
@@ -98,7 +98,7 @@ var dump = function(){
   var input          = options.input + '/' + index;
   var output_data    = options.output + '/' + index + '.json';
   var output_mapping = options.output + '/' + index + '.mapping.json';
-  
+
   log('debug', "dumping " + input + ' to ' + output_mapping);
 
   var mapping_child = fork(__dirname + '/elasticdump', [
@@ -123,5 +123,5 @@ var dump = function(){
     working--;
     complete++;
   });
-  
+
 };
